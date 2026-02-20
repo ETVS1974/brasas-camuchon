@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Brasas Camuchón</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1080px; height: 1080px;
+    overflow: hidden;
+    background: #080503;
+  }
+  .flyer {
+    width: 1080px; height: 1080px;
+    position: relative;
+    background: #080503;
+    overflow: hidden;
+  }
+  .bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 65%, #3a1503 0%, #180801 45%, #040201 100%);
+  }
+  .deco-lines {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(-45deg, transparent, transparent 70px, rgba(255,90,0,0.02) 70px, rgba(255,90,0,0.02) 71px);
+  }
+  .top-bar, .bottom-bar {
+    position: absolute; left: 0; right: 0; height: 7px;
+    background: linear-gradient(90deg, #c23200, #ff7700, #ff4500, #ff7700, #c23200);
+  }
+  .top-bar { top: 0; }
+  .bottom-bar { bottom: 0; }
+  .left-line, .right-line {
+    position: absolute; top: 70px; bottom: 70px; width: 2px;
+    background: linear-gradient(180deg, transparent, rgba(255,100,0,0.5), transparent);
+  }
+  .left-line { left: 52px; }
+  .right-line { right: 52px; }
+  .corner-glow {
+    position: absolute; width: 350px; height: 350px; border-radius: 50%; pointer-events: none;
+  }
+  .corner-glow.tl { top:-120px; left:-120px; background: radial-gradient(circle, rgba(255,70,0,0.13) 0%, transparent 70%); }
+  .corner-glow.br { bottom:-120px; right:-120px; background: radial-gradient(circle, rgba(255,70,0,0.10) 0%, transparent 70%); }
+  .embers { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .ember {
+    position: absolute; border-radius: 50%;
+    animation: rise linear infinite; opacity: 0;
+  }
+  @keyframes rise {
+    0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+    8%   { opacity: 0.9; }
+    92%  { opacity: 0.4; }
+    100% { transform: translateY(-1000px) translateX(var(--dx)) scale(0.2); opacity: 0; }
+  }
+
+  .content {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 55px 95px; gap: 0;
+  }
+
+  .tag-top {
+    font-family: 'Lato', sans-serif; font-weight: 300;
+    font-size: 14px; letter-spacing: 9px;
+    color: #ff8800; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .divider {
+    display: flex; align-items: center; gap: 14px;
+    width: 100%; margin-bottom: 20px;
+  }
+  .div-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,120,0,0.6), transparent); }
+  .div-dia { width: 7px; height: 7px; background: #ff6600; transform: rotate(45deg); flex-shrink: 0; }
+
+  .brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 128px; line-height: 0.88;
+    color: #fff; text-align: center;
+    letter-spacing: 5px;
+    text-shadow: 0 0 50px rgba(255,100,0,0.9), 0 0 100px rgba(255,60,0,0.5), 3px 3px 18px rgba(0,0,0,0.95);
+    margin-bottom: 6px;
+  }
+  .brand .accent { color: #ff5200; text-shadow: 0 0 35px rgba(255,80,0,1), 0 0 70px rgba(255,40,0,0.8), 3px 3px 18px rgba(0,0,0,0.95); }
+
+  .rabbit-wrap {
+    position: relative;
+    width: 230px; height: 230px;
+    margin: 8px 0 4px;
+    filter: drop-shadow(0 0 28px rgba(255,110,0,0.55)) drop-shadow(0 8px 20px rgba(0,0,0,0.8));
+  }
+  .rabbit-wrap img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+  }
+  .rabbit-glow {
+    position: absolute; bottom: -18px; left: 50%;
+    transform: translateX(-50%);
+    width: 180px; height: 28px;
+    background: radial-gradient(ellipse, rgba(255,100,0,0.55) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .methods {
+    display: flex; align-items: center; gap: 18px;
+    margin: 14px 0 18px;
+  }
+  .method { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .method-ico { font-size: 30px; filter: drop-shadow(0 0 8px rgba(255,130,0,0.9)); }
+  .method-lbl {
+    font-family: 'Lato', sans-serif; font-weight: 700;
+    font-size: 10px; letter-spacing: 3px;
+    color: #ff8c00; text-transform: uppercase;
+  }
+  .dot { width: 5px; height: 5px; background: #ff5500; border-radius: 50%; align-self: center; flex-shrink: 0; }
+
+  .slogan {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-style: italic;
+    color: rgba(255,255,255,0.72);
+    text-align: center; line-height: 1.55;
+    margin-bottom: 22px;
+  }
+  .slogan strong { color: #ff8c00; font-style: normal; }
+
+  .fire-div {
+    display: flex; align-items: center; gap: 12px;
+    width: 80%; margin-bottom: 22px;
+  }
+  .fire-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,100,0,0.45), transparent); }
+
+  .cta {
+    background: linear-gradient(135deg, #e83d00 0%, #b82c00 100%);
+    border-radius: 60px; padding: 16px 50px;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: 0 0 40px rgba(255,60,0,0.55), 0 8px 30px rgba(0,0,0,0.65);
+    position: relative; overflow: hidden;
+  }
+  .cta::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 48%;
+    background: rgba(255,255,255,0.07);
+    border-radius: 60px 60px 0 0;
+  }
+  .cta-ico { font-size: 32px; }
+  .cta-inner { display: flex; flex-direction: column; }
+  .cta-lbl {
+    font-family: 'Lato', sans-serif; font-weight: 300;
+    font-size: 11px; letter-spacing: 4px;
+    color: rgba(255,255,255,0.82); text-transform: uppercase;
+  }
+  .cta-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 34px; color: #fff;
+    letter-spacing: 3px; line-height: 1;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+
+  .footer {
+    position: absolute; bottom: 22px;
+    left: 0; right: 0; text-align: center;
+    font-family: 'Lato', sans-serif; font-weight: 300;
+    font-size: 10px; letter-spacing: 5px;
+    color: rgba(255,140,0,0.4); text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="flyer">
+  <div class="bg"></div>
+  <div class="deco-lines"></div>
+  <div class="corner-glow tl"></div>
+  <div class="corner-glow br"></div>
+  <div class="embers" id="embers"></div>
+  <div class="top-bar"></div>
+  <div class="bottom-bar"></div>
+  <div class="left-line"></div>
+  <div class="right-line"></div>
+
+  <div class="content">
+    <div class="tag-top">✦ Comida Ahumada ✦</div>
+
+    <div class="divider">
+      <div class="div-line"></div>
+      <div class="div-dia"></div>
+      <div class="div-line"></div>
+    </div>
+
+    <div class="brand">BRASAS<br><span class="accent">CAMUCHÓN</span></div>
+
+    <div class="rabbit-wrap">
+      <img src="data:image/png;base64,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" alt="Camuchón">
+      <div class="rabbit-glow"></div>
+    </div>
+
+    <div class="methods">
+      <div class="method">
+        <div class="method-ico">🔥</div>
+        <div class="method-lbl">Cilindro</div>
+      </div>
+      <div class="dot"></div>
+      <div class="method">
+        <div class="method-ico">🥩</div>
+        <div class="method-lbl">Parrilla</div>
+      </div>
+      <div class="dot"></div>
+      <div class="method">
+        <div class="method-ico">📦</div>
+        <div class="method-lbl">Caja China</div>
+      </div>
+    </div>
+
+    <div class="slogan">
+      Huele desde la cuadra,<br>sabe <strong>mejor aún</strong>
+    </div>
+
+    <div class="fire-div">
+      <div class="fire-line"></div>
+      <span style="font-size:20px">🔥</span>
+      <div class="fire-line"></div>
+    </div>
+
+    <div class="cta">
+      <div class="cta-ico">📲</div>
+      <div class="cta-inner">
+        <div class="cta-lbl">Pedidos y reservas</div>
+        <div class="cta-num">+51 934 099 064</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">🔥 Donde hay brasa, hay sabor 🔥</div>
+</div>
+
+<script>
+  const container = document.getElementById('embers');
+  const colors = ['#ff4500','#ff6600','#ff8800','#ffaa00','#ff3300'];
+  for (let i = 0; i < 40; i++) {
+    const e = document.createElement('div');
+    e.className = 'ember';
+    const size = Math.random() * 5 + 2;
+    e.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*1080}px; bottom:0;
+      background:${colors[Math.floor(Math.random()*5)]};
+      box-shadow: 0 0 ${size*2}px ${colors[Math.floor(Math.random()*5)]};
+      animation-duration:${Math.random()*7+5}s;
+      animation-delay:${Math.random()*9}s;
+      --dx:${(Math.random()-0.5)*200}px;
+    `;
+    container.appendChild(e);
+  }
+</script>
+</body>
+</html>
